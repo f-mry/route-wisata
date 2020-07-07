@@ -12,11 +12,12 @@ type WisataModel struct {
     DB *sql.DB
 }
 
-func (m *WisataModel) Get() ([]*models.InfoWisata, error) {
+func (m *WisataModel) Get(page int) ([]*models.InfoWisata, error) {
+    offset := page * 10
 
-    stmt := "SELECT `id`, `nama`, `deskripsi` from `dummylocation`"
+    stmt := "SELECT `id`, `nama`, `deskripsi` from `dummylocation` LIMIT ?,10"
 
-    rows, err := m.DB.Query(stmt)
+    rows, err := m.DB.Query(stmt, offset)
     if err != nil {
         // log.Println(err)
         return nil, err

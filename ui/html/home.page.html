@@ -9,7 +9,10 @@
 <body>
 
     {{ range .ListWisata }}
-        {{ .Nama }}
+    <div>
+        <h1>{{ .Id }} - {{ .Nama }}</h1>
+        <h2>{{ .Deskripsi }}</h2>
+    </div>
     {{end}}
 
 </body>

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"krisna/pkg/models"
 	"net/http"
+	"strconv"
 	"text/template"
 )
 
@@ -13,14 +14,27 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
         fmt.Fprintf(w, "Page Not Found: %s", r.URL.RawPath)
         return
     }
-    // fmt.Fprintf(w, "Hello Aha")
-    wisata, err := app.wisata.Get()
+
+    page := r.URL.Query().Get("page")
+
+    if page == "" {
+        page = "0"
+    }
+
+    index, err := strconv.Atoi(page)
+    if err != nil {
+        app.infoLog.Printf("Query error: %v", err)
+        fmt.Fprintf(w, "Page Not Found: %s", r.URL.RawPath)
+        return
+    }
+
+    wisata, err := app.wisata.Get(index)
     if err != nil {
         app.infoLog.Println(err)
         app.serverError(w, err)
         return
     }
-    fmt.Println(wisata)
+    
 
     template_files := []string{
         "ui/html/home.page.html",
