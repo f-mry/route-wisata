@@ -18,7 +18,7 @@ func (m *WisataModel) Get() ([]*models.InfoWisata, error) {
 
     rows, err := m.DB.Query(stmt)
     if err != nil {
-        log.Println(err)
+        // log.Println(err)
         return nil, err
     }
 

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"krisna/pkg/models"
 	"net/http"
 	"text/template"
 )
@@ -13,6 +14,13 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
         return
     }
     // fmt.Fprintf(w, "Hello Aha")
+    wisata, err := app.wisata.Get()
+    if err != nil {
+        app.infoLog.Println(err)
+        app.serverError(w, err)
+        return
+    }
+    fmt.Println(wisata)
 
     template_files := []string{
         "ui/html/home.page.html",
@@ -24,7 +32,17 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
         return
     }
 
-    err = ts.Execute(w, nil)
+    // type Data struct {
+    //     listWisata []*models.InfoWisata
+    // }
+
+    var Data struct{
+        ListWisata []*models.InfoWisata
+    }
+
+    Data.ListWisata = wisata
+
+    err = ts.Execute(w, Data )
     if err != nil {
         app.serverError(w, err)
         return
