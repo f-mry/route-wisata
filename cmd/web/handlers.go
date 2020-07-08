@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"text/template"
+    // "net/url"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -62,3 +63,13 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
         return
     }
 }
+
+func (app *application) route(w http.ResponseWriter, r *http.Request) {
+    query := r.URL.Query()["node"]
+    for _, q := range(query) {
+        fmt.Println(q)
+    }
+
+    fmt.Fprintf(w, "Query: %v", query)
+}
+
