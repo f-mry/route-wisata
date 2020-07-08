@@ -1,33 +1,32 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	// "io/ioutil"
 	"log"
 	"net/http"
 )
 
 func main() {
-    query := `{"idWisata":[{"id":"0"},{"id":"1"},{"id":"2"},{"id":"3"}],"idhotel":["1"],"degree":[1,1,1]}`
 
-    resp, err := http.Get("http://127.0.0.1:5000/cuckoo/" + query)
-    if err != nil {
-        fmt.Println(err)
-    }
-
-    // fmt.Print(resp.Body)
-    data, err := ioutil.ReadAll(resp.Body)
+    node := []int{1,2,3}
+    nodeMap := map[string]interface{}{"node" : node, "hotel": 4  }
+    jsonVal, err := json.Marshal(nodeMap)
     if err != nil {
         log.Fatal(err)
     }
+
+    resp, err := http.Post("http://127.0.0.1:5000/api", "application/json", bytes.NewBuffer(jsonVal) )
+    if err != nil {
+        log.Fatal("HTTP Post: ", err)
+    }
+    defer resp.Body.Close()
+
+
     var value map[string]interface{}
-    err = json.Unmarshal(data, &value)
-    if err != nil {
-        log.Fatal(err)
-    }
-    fmt.Println(value)
+    json.NewDecoder(resp.Body).Decode(&value)
 
-
-
+    fmt.Printf("%v\n", value)
 }
