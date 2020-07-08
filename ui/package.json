@@ -17,6 +17,7 @@
     "autoprefixer": "^9.8.4",
     "postcss-cli": "^7.1.1",
     "postcss-preset-env": "^6.7.0",
+    "selectable.js": "^0.17.7",
     "tailwindcss": "^1.4.6"
   }
 }

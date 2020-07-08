@@ -4,16 +4,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="/static/js/selectable.js"></script>
     <title>Document</title>
 </head>
 <body>
+        <nav class="content-center h-16 mb-2 text-center text-white bg-black">
+            <strong>DAFTAR WISATA</strong>
+        </nav>
 
-    {{ range .ListWisata }}
-    <div>
-        <h1>{{ .Id }} - {{ .Nama }}</h1>
-        <h2>{{ .Deskripsi }}</h2>
-    </div>
-    {{end}}
+    <main class="container mx-auto">
+        <div class="flex flex-wrap w-full">
+            {{ range .ListWisata }}
+            <div class="w-full rounded shadow-lg lg:w-1/3 md:w-1/2 card">
+                <div class="px-6 py-4">
+                    <div class="mb-2 text-xl font-bold">
+                        {{ .Nama }}
+                    </div>
+                    <p>
+                        {{ .Deskripsi }}
+                    </p>
+                    <button nodeID={{.Id}} class="p-2 bg-blue-400 rounded select-node">Pilih Node</button>
+                </div>
+            </div>
+            {{end}}
+        </div>
+        <button class="w-full p-5 bg-blue-500" onclick="showNodeID()">show</button>
+    </main>
+
+    <script>
+        const selectable = new Selectable({
+            filter: ".select-node",
+            toggle: true,
+        })
+
+        selectable.on("selecteditem", function(item) {
+            item.node.classList.remove("bg-blue-400")
+            item.node.classList.add("bg-red-400")
+        })
+
+        selectable.on("deselecteditem", function(item) {
+            item.node.classList.remove("bg-red-400")
+            item.node.classList.add("bg-blue-400")
+        })
+
+        function showNodeID(){
+            var nodes = selectable.getSelectedNodes()
+            nodes.forEach(function(node) {
+                console.log(node.getAttributeNode("nodeID").value)
+            })
+        }
+    </script>
+
 
 </body>
 </html>
