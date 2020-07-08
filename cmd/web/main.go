@@ -17,6 +17,7 @@ type application struct {
     errorLog *log.Logger
     infoLog *log.Logger
     wisata *mysql.WisataModel
+    hotel *mysql.HotelModel
 }
 
 

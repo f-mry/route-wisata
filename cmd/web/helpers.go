@@ -21,3 +21,7 @@ func (app *application) clientError(w http.ResponseWriter, status int)  {
 func (app *application) notFound(w http.ResponseWriter) {
     app.clientError(w, http.StatusNotFound)
 }
+
+func (app *application) getCuckooRoute(node []int) {
+    return
+}

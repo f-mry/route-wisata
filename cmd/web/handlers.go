@@ -35,6 +35,8 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
         app.serverError(w, err)
         return
     }
+
+    hotel, err := app.hotel.Get()
     
 
     template_files := []string{
@@ -53,6 +55,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
     var Data struct{
         ListWisata []*models.InfoWisata
+        ListHotwl []*models.InfoHotel
     }
 
     Data.ListWisata = wisata
@@ -65,11 +68,12 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) route(w http.ResponseWriter, r *http.Request) {
-    query := r.URL.Query()["node"]
-    for _, q := range(query) {
-        fmt.Println(q)
+    node := r.URL.Query()["node"]
+    hotel := r.URL.Query().Get("hotelid")
+    for _, q := range(node) {
+        fmt.Printf("%v, %T\n", q,q)
     }
 
-    fmt.Fprintf(w, "Query: %v", query)
+    fmt.Fprintf(w, "Query: %v\nHotel: %v", node, hotel)
 }
 

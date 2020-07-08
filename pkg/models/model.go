@@ -5,3 +5,9 @@ type InfoWisata struct {
     Nama string
     Deskripsi string
 }
+
+type InfoHotel struct {
+    Id int
+    Nama string
+    
+}
