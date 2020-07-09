@@ -13,6 +13,14 @@
         </nav>
 
     <main class="container mx-auto">
+        <div class="w-full">
+            <label for="hotel">Pilih Hotel</label>
+            <select name="hotel" id="hotel">
+                {{ range .ListHotel }}
+                <option value="{{ .Id }}">{{ .Nama }}</option>
+                {{end}}
+            </select>
+        </div>
         <div class="flex flex-wrap w-full">
             {{ range .ListWisata }}
             <div class="w-full rounded shadow-lg lg:w-1/3 md:w-1/2 card">
@@ -49,10 +57,14 @@
 
         function showNodeID(){
             var nodes = selectable.getSelectedNodes()
+            var query = "route?"
             nodes.forEach(function(node) {
                 console.log(node.getAttributeNode("nodeID").value)
+                query = query + "&node=" + node.getAttributeNode("nodeID").value
             })
-            location.assign("route?&node[0]=2&node[1]=6&node[2]=8")
+            hotel = document.getElementById("hotel").value
+            query = query + "&hotel=" + hotel
+            location.assign(query)
         }
     </script>
 

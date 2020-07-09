@@ -2,11 +2,14 @@ package main
 
 import (
 	"fmt"
+	"krisna/pkg/cuckoo"
 	"krisna/pkg/models"
 	"net/http"
 	"strconv"
 	"text/template"
-    // "net/url"
+
+	"github.com/mitchellh/mapstructure"
+	// "net/url"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -73,12 +76,34 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *application) route(w http.ResponseWriter, r *http.Request) {
-    node := r.URL.Query()["node"]
-    hotel := r.URL.Query().Get("hotelid")
-    for _, q := range(node) {
+    nodeString := r.URL.Query()["node"]
+    hotelString := r.URL.Query().Get("hotel")
+    hotel, _ := strconv.Atoi(hotelString)
+    node := []int{}
+
+    for _, q := range(nodeString) {
         fmt.Printf("%v, %T\n", q,q)
+        nodeId, err := strconv.Atoi(q)
+        if err != nil {
+            app.infoLog.Printf("Node parse error: %v", err)
+        }
+        node = append(node, nodeId)
     }
 
-    fmt.Fprintf(w, "Query: %v\nHotel: %v", node, hotel)
+    route, err := cuckoo.GetRoute(node, hotel)
+    if err != nil {
+        app.infoLog.Println(err)
+        return
+    }
+
+    var Result models.Route
+    err = mapstructure.Decode(route, &Result)
+    if err != nil {
+        app.infoLog.Println(err)
+        return
+    }
+
+    // fmt.Printf("%v\n", Result)
+    fmt.Fprintf(w, "Query: %v\nHotel: %v\nData: \n%#v", node, hotel, Result)
 }
 
