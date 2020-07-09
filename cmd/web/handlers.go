@@ -65,7 +65,7 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
     Data.ListWisata = wisata
 
 
-    err = ts.Execute(w, Data )
+    err = ts.Execute(w, Data)
     if err != nil {
         app.serverError(w, err)
         return

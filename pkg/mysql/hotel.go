@@ -27,12 +27,12 @@ func (m *HotelModel) Get() ([]*models.InfoHotel, error) {
     var infoHotel []*models.InfoHotel
 
     for rows.Next() {
-        hotel := &models.InfoHotel{}
+        hotel := models.InfoHotel{}
         err = rows.Scan(&hotel.Id, &hotel.Nama)
         if err != nil {
             log.Println(err)
         }
-        infoHotel = append(infoHotel, hotel)
+        infoHotel = append(infoHotel, &hotel)
     }
 
     return infoHotel, nil

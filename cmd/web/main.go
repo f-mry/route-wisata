@@ -35,6 +35,7 @@ func main() {
         errorLog: errorLog,
         infoLog: infoLog,
         wisata: &mysql.WisataModel{DB: db},
+        hotel: &mysql.HotelModel{DB: db},
     }
 
     server := &http.Server{
