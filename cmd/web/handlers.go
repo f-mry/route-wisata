@@ -37,6 +37,9 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
     }
 
     hotel, err := app.hotel.Get()
+    if err != nil {
+        app.infoLog.Println(err)
+    }
     
 
     template_files := []string{
@@ -55,10 +58,12 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 
     var Data struct{
         ListWisata []*models.InfoWisata
-        ListHotwl []*models.InfoHotel
+        ListHotel []*models.InfoHotel
     }
 
+    Data.ListHotel = hotel
     Data.ListWisata = wisata
+
 
     err = ts.Execute(w, Data )
     if err != nil {

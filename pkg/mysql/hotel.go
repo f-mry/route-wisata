@@ -12,12 +12,11 @@ type HotelModel struct {
     DB *sql.DB
 }
 
-func (m *HotelModel) Get(page int) ([]*models.InfoHotel, error) {
-    offset := page * 10
+func (m *HotelModel) Get() ([]*models.InfoHotel, error) {
 
     stmt := "SELECT `id`, `nama` FROM `dummyhotel`"
 
-    rows, err := m.DB.Query(stmt, offset)
+    rows, err := m.DB.Query(stmt)
     if err != nil {
         // log.Println(err)
         return nil, err
@@ -33,7 +32,7 @@ func (m *HotelModel) Get(page int) ([]*models.InfoHotel, error) {
         if err != nil {
             log.Println(err)
         }
-        infoHotel = append(infoHotel, wisata)
+        infoHotel = append(infoHotel, hotel)
     }
 
     return infoHotel, nil
