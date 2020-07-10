@@ -82,7 +82,7 @@ func (app *application) route(w http.ResponseWriter, r *http.Request) {
     node := []int{}
 
     for _, q := range(nodeString) {
-        fmt.Printf("%v, %T\n", q,q)
+        // fmt.Printf("%v, %T\n", q,q)
         nodeId, err := strconv.Atoi(q)
         if err != nil {
             app.infoLog.Printf("Node parse error: %v", err)
@@ -104,6 +104,22 @@ func (app *application) route(w http.ResponseWriter, r *http.Request) {
     }
 
     // fmt.Printf("%v\n", Result)
-    fmt.Fprintf(w, "Query: %v\nHotel: %v\nData: \n%#v", node, hotel, Result)
+    // fmt.Fprintf(w, "Query: %v\nHotel: %v\nData: \n%#v", node, hotel, Result)
+
+    template_files := []string{
+        "ui/html/route.page.html",
+    }
+
+    ts, err := template.ParseFiles(template_files...)
+    if err != nil {
+        app.serverError(w, err)
+        return
+    }
+
+    err = ts.Execute(w, Result)
+    if err != nil {
+        app.serverError(w, err)
+        return
+    }
 }
 

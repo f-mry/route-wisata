@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <title>Route</title>
+</head>
+<body>
+
+    <nav class="content-center h-16 mb-2 text-center text-white bg-black">
+        <strong>RUTE WISATA</strong>
+    </nav>
+
+    <main class="container mx-auto">
+        {{ range $day, $_ := .Response }}
+        <div class="flex h-64 mb-3">
+            <span>Day {{ $day }}</span>
+            <div class="w-1/5 nodeList">
+                {{ range .NodeIndex }}
+                <h1>{{ index . 1 }}</h1>
+                {{ end }}
+
+            </div>
+            <div class="w-4/5 nodeMap" id="map-{{ $day }}">
+            </div>
+        </div>
+        {{ end }}
+    </main>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC21Uj8OAJMLUcTSxthEP8p7JJl_VmQ-lc"
+  type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        {{ with index .Response 0 }}
+        var hotel = new google.maps.LatLng({{ index .HotelLocation 0 }}, {{ index .HotelLocation 1 }})
+        {{ end }}
+        var maps = []
+
+        async function getRoute(map, location){
+            var dirService = new google.maps.DirectionsService()
+            var dirRender = new google.maps.DirectionsRenderer()
+            dirRender.setMap(map)
+
+
+            var node = []
+            location.forEach(function(loc) {
+                node.push({
+                    location : new google.maps.LatLng(loc[0], loc[1]),
+                    stopover : true
+                })
+            })
+
+            dirService.route({
+                origin : hotel,
+                destination : hotel,
+                waypoints : node,
+                optimizeWaypoints : false,
+                travelMode : google.maps.TravelMode.DRIVING
+            }, function(response, status){
+                if (status == google.maps.DirectionsStatus.OK) {
+                    dirRender.setDirections(response)
+                }
+                else {
+                    console.log("Response error")
+                }
+            })
+
+
+
+        }
+
+        {{ range $index, $_ := .Response }}
+        maps.push(new google.maps.Map(document.getElementById("map-{{ $index }}"),{
+            center: new google.maps.LatLng(-6.921531365485566, 107.61059082222903),
+            zoom: 5
+
+        })) 
+
+        var loc{{ $index }} = [{{ range .Location }}[{{index . 0}}, {{ index . 1 }}], {{end}}]
+
+        getRoute(maps[{{ $index }}], loc{{ $index }})
+        {{ end }}
+
+
+
+
+    </script>
+    
+</body>
+</html>
