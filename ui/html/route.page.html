@@ -15,12 +15,11 @@
     <main class="container mx-auto">
         {{ range $day, $_ := .Response }}
         <div class="flex h-64 mb-3">
-            <span>Day {{ $day }}</span>
+            <span>Day {{ inc $day }}</span>
             <div class="w-1/5 nodeList">
-                {{ range .NodeIndex }}
-                <h1>{{ index . 1 }}</h1>
+                {{ range $index, $node := .NodeIndex }}
+                <h1>{{ inc $index | wypts | printf "%c"  }} - {{ index $node 1 }}</h1>
                 {{ end }}
-
             </div>
             <div class="w-4/5 nodeMap" id="map-{{ $day }}">
             </div>

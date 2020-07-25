@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"text/template"
+    // "html/template"
 
 	"github.com/mitchellh/mapstructure"
 	// "net/url"
@@ -110,7 +111,17 @@ func (app *application) route(w http.ResponseWriter, r *http.Request) {
         "ui/html/route.page.html",
     }
 
-    ts, err := template.ParseFiles(template_files...)
+    FuncMap := template.FuncMap{
+        "inc" : func(i int) int {
+            return i + 1
+        },
+        "wypts" : func(i int) rune {
+            return rune('A' - 1 + i)
+        },
+    }
+    
+    ts, err := template.New("route.page.html").Funcs(FuncMap).ParseFiles(template_files...)
+    // ts, err := template.ParseFiles(template_files...)
     if err != nil {
         app.serverError(w, err)
         return
