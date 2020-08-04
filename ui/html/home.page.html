@@ -29,7 +29,7 @@
                         {{ .Nama }}
                     </div>
                     <p>
-                        {{ .Deskripsi }}
+                        {{ trim .Deskripsi }}... <a href="#">Read More</a>
                     </p>
                     <button nodeID={{.Id}} class="p-2 bg-blue-400 rounded select-node">Pilih Node</button>
                 </div>

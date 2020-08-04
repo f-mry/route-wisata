@@ -11,6 +11,7 @@ import (
 
 	"github.com/mitchellh/mapstructure"
 	// "net/url"
+    "strings"
 )
 
 func (app *application) home(w http.ResponseWriter, r *http.Request) {
@@ -44,13 +45,22 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
     if err != nil {
         app.infoLog.Println(err)
     }
+
+    FuncMap := template.FuncMap{
+        "trim" : func(str string) string{
+            lastSpace := strings.LastIndexByte(str[0:200], ' ')
+            return str[0:lastSpace + 1]
+        },
+    }
     
 
     template_files := []string{
         "ui/html/home.page.html",
     }
 
-    ts, err := template.ParseFiles(template_files...)
+    ts, err := template.New("home.page.html").Funcs(FuncMap).ParseFiles(template_files...)
+
+    // ts, err := template.ParseFiles(template_files...)
     if err != nil {
         app.serverError(w, err)
         return
